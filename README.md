@@ -1,4 +1,4 @@
-# CS205 Final Project
+# CS205 Final Project - Spring 2019
 
 ## The Task:
 In this project we will try and build a predicitve model to being positive to cancer or malignancy.
