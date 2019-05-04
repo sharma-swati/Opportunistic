@@ -1,5 +1,7 @@
 # CS205 Final Project
 
+## The Task:
+- 
 
 ## File list:
 - **nhanes.py:** implementation of the data preprocessing logic as well as definition an example dataset.
