@@ -9,12 +9,19 @@ In this project we will try and build a predicitve model to being positive to ca
 **For example**: Our target of focus (cancer or malignancy) is found under Questionnaire Data -> Medical Conditions -> MCQ220 - Ever told you had cancer or malignancy. Under this question the variable name **MCQ220** is what we will use as an identifier in our code.
 
 **Tip**: If you are looking for a feature, another option is to google "NHANES \<feature name\>". This is effective if you have a feature in mind but don't want to go over all possible categories to find it.
+
+**Important**: When selecting features to process, remember to input the correct category where the feature can be found, so that the processing code can find it.
   
 ### What you are scored on
 The grade for this task will be seperated into 3 categories
 - **Feature selection, and evaluation**. You will be required to explain why certain features were incorporated. empiric evaluation (e.g: mutual information) or a logical explanation for a group of features (e.g: age, geneder are included as demographics, as certain types of cancer affect certain demographics with higher probability. As can be seen [here](https://gis.cdc.gov/Cancer/USCS/DataViz.html)).
 - **Preprocessing and feature engineering**. Writing your own preprocessing code, explain why you chose a specific imputation technique, or changed the features in a certain way. You can support you argument with previous research done on the topic or with your own experimentation.
-- **Predictive modeling**. 
+- **Predictive modeling**. Build an ML model to predict having cancer. Construct a model to fit the data, explain why the chosen model was selected, describe experiments done with the model (e.g: hyper parameter tuning).
+
+### How you are scored
+The grade will be given based on the quality, supported arguments, and clarity of evaluation of each of the 3 parts.
+Each part is equal 33.3333...% of your final project grade. Bonus points for originality and "out of the box" thinking for approaching each of these 3 parts.
+
 
 ## File list:
 - **nhanes.py:** implementation of the data preprocessing logic as well as definition an example dataset.
