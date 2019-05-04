@@ -11,7 +11,8 @@ In this project we will try and build a predicitve model to being positive to ca
 ### What you are scored on
 The grade for this task will be seperated into 3 categories
 - **Feature selection, and evaluation**. You will be required to explain why certain features were incorporated. empiric evaluation (e.g: mutual information) or a logical explanation for a group of features (e.g: age, geneder are included as demographics, as certain types of cancer affect certain demographics with higher probability. As can be seen [here](https://gis.cdc.gov/Cancer/USCS/DataViz.html)).
-- **Preprocessing and feature engineering**. Writing your own preprocessing code, explain why you chose a specific imputation technique, or changed the features in a certain way. You can support you argument with previous research don
+- **Preprocessing and feature engineering**. Writing your own preprocessing code, explain why you chose a specific imputation technique, or changed the features in a certain way. You can support you argument with previous research done on the topic or with your own experimentation.
+- **Predictive modeling**. 
 
 ## File list:
 - **nhanes.py:** implementation of the data preprocessing logic as well as definition an example dataset.
