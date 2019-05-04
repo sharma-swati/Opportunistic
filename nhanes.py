@@ -89,8 +89,8 @@ class NHANES:
             df_proc.append(prepr_col)
         self.dataset = pd.concat(df_proc, axis=1)
         return self.dataset
- 
-
+    
+    
 # Preprocessing functions
 def preproc_onehot(df_col, args=None):
     return pd.get_dummies(df_col, prefix=df_col.name, prefix_sep='#')
@@ -121,6 +121,8 @@ def preproc_dropna(df_col, args=None):
     df_col.dropna(axis=0, how='any', inplace=True)
     return df_col
 
+#### Add your own preprocessing functions ####
+
 # Dataset loader
 class Dataset():
     """ 
@@ -140,17 +142,19 @@ class Dataset():
         self.targets = None
         self.costs = None
         
-    def load_hypertension(self, opts=None):
+    def load_arthritis(self, opts=None):
         columns = [
             # TARGET: systolic BP average
-            FeatureColumn('Examination', 'BPXSAR',
-                             preproc_dropna, None),
+            FeatureColumn('Questionnaire', 'MCQ160A', 
+                                    None, None),
             # Gender
             FeatureColumn('Demographics', 'RIAGENDR', 
                                  preproc_real, None),
             # Age at time of screening
             FeatureColumn('Demographics', 'RIDAGEYR', 
                                  preproc_real, None),
+            FeatureColumn('Demographics', 'RIDRETH3', 
+                                 preproc_onehot, None),
             # Race/ethnicity
             FeatureColumn('Demographics', 'RIDRETH1', 
                                  preproc_onehot, None),
@@ -160,9 +164,6 @@ class Dataset():
             # Education level
             FeatureColumn('Demographics', 'DMDEDUC2', 
                                  preproc_real, {'cutoff':5}),
-            # Sodium eaten day before
-            FeatureColumn('Dietary', 'DR2TSODI', 
-                             preproc_real, {'cutoff':20683}),
             # BMI
             FeatureColumn('Examination', 'BMXBMI', 
                                  preproc_real, None),
@@ -181,15 +182,6 @@ class Dataset():
             # Total Cholesterol
             FeatureColumn('Laboratory', 'LBXTC', 
                                  preproc_real, None),
-            # Triglyceride
-            FeatureColumn('Laboratory', 'LBXTR', 
-                                 preproc_real, None),
-            # fibrinogen
-            FeatureColumn('Laboratory', 'LBXFB', 
-                                 preproc_real, None),
-            # LDL-cholesterol
-            FeatureColumn('Laboratory', 'LBDLDL', 
-                                 preproc_real, None),
             # Alcohol consumption
             FeatureColumn('Questionnaire', 'ALQ101', 
                                  preproc_real, {'cutoff':2}),
@@ -202,6 +194,11 @@ class Dataset():
                                  preproc_real, {'cutoff':2}),
             FeatureColumn('Questionnaire', 'PAQ180', 
                                  preproc_real, {'cutoff':4}),
+            FeatureColumn('Questionnaire', 'PAD615', 
+                                 preproc_real, {'cutoff':780}),
+            # Doctor told overweight (risk factor)
+            FeatureColumn('Questionnaire', 'MCQ160J', 
+                                 preproc_onehot, {'cutoff':2}),
             # Sleep
             FeatureColumn('Questionnaire', 'SLD010H', 
                                  preproc_real, {'cutoff':12}),
@@ -210,18 +207,24 @@ class Dataset():
                                  preproc_onehot, None),
             FeatureColumn('Questionnaire', 'SMD030', 
                                  preproc_real, {'cutoff':72}),
-            # Blood relatives have hypertension/stroke
-            FeatureColumn('Questionnaire', 'MCQ250F', 
-                                 preproc_real, {'cutoff':2}),
+            # Blood relatives with arthritis
+            FeatureColumn('Questionnaire', 'MCQ250D',
+                                 preproc_onehot, {'cutoff':2}),
+            # joint pain/aching/stiffness in past year
+            FeatureColumn('Questionnaire', 'MPQ010',
+                                 preproc_onehot, {'cutoff':2}),
+            # symptoms began only because of injury
+            FeatureColumn('Questionnaire', 'MPQ030',
+                                 preproc_onehot, {'cutoff':2}),
+            # how long experiencing pain
+            FeatureColumn('Questionnaire', 'MPQ110',
+                                 preproc_real, {'cutoff':4}),
         ]
         nhanes_dataset = NHANES(self.data_path, columns)
         df = nhanes_dataset.process()
-        # extract feature and target
-        # below 90/60 is hypotension, in between is normal, above 120/80 is prehypertension,
-        # above 140/90 is hypertension 
-        fe_cols = df.drop(['BPXSAR'], axis=1)
+        fe_cols = df.drop(['MCQ160A'], axis=1)
         features = fe_cols.values
-        target = df['BPXSAR'].values
+        target = df['MCQ160A'].values
         # remove nan labeled samples
         inds_valid = ~ np.isnan(target)
         features = features[inds_valid]
@@ -229,8 +232,8 @@ class Dataset():
 
         # Put each person in the corresponding bin
         targets = np.zeros(target.shape[0])
-        targets[target < 140] = 0 # Rest (hypotsn, normal, prehyptsn)
-        targets[target >= 140] = 1 # hypertension
+        targets[target == 1] = 0 # yes arthritis
+        targets[target == 2] = 1 # no arthritis
 
        # random permutation
         perm = np.random.permutation(targets.shape[0])
@@ -239,3 +242,6 @@ class Dataset():
         self.costs = [c.cost for c in columns[1:]]
         self.costs = np.array(
             [item for sublist in self.costs for item in sublist])
+        
+        
+    #### Add your own dataset loader ####
