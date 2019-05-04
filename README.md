@@ -1,7 +1,7 @@
 # CS205 Final Project
 
 ## The Task:
-- 
+In this project we will try and build a predicitve model to having cancer. 
 
 ## File list:
 - **nhanes.py:** implementation of the data preprocessing logic as well as definition an example dataset.
