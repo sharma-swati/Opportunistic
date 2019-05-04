@@ -8,7 +8,7 @@ In this project we will try and build a predicitve model to being positive to ca
 
 **For example**: Our target of focus (cancer or malignancy) is found under Questionnaire Data -> Medical Conditions -> MCQ220 - Ever told you had cancer or malignancy. Under this question the variable name **MCQ220** is what we will use as an identifier in our code.
 
-**Tip**: If you are looking for a feature, another option is to google "NHANES <feature>". This is effective if you have a feature in mind but don't want to go over all possible categories to find it.
+**Tip**: If you are looking for a feature, another option is to google "NHANES \<feature name\>". This is effective if you have a feature in mind but don't want to go over all possible categories to find it.
   
 ### What you are scored on
 The grade for this task will be seperated into 3 categories
