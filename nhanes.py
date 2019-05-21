@@ -144,87 +144,248 @@ class Dataset():
         
     def load_arthritis(self, opts=None):
         columns = [
-            # TARGET: systolic BP average
-            FeatureColumn('Questionnaire', 'MCQ160A', 
-                                    None, None),
-            # Gender
-            FeatureColumn('Demographics', 'RIAGENDR', 
-                                 preproc_real, None),
-            # Age at time of screening
+            # TARGET: Ever told you had cancer or malignancy
+            FeatureColumn('Questionnaire', 'MCQ220', 
+                                    None, {'cutoff':2}),
+
+            ######################## DEMOGRAPHIC ########################
+            # Country of birth
+            FeatureColumn('Demographics', 'DMDBORN4', 
+                                 preproc_real, {'cutoff':2}),
+
+            # Age in years at time of screening - till 80
             FeatureColumn('Demographics', 'RIDAGEYR', 
                                  preproc_real, None),
+
+            # Gender
+            FeatureColumn('Demographics', 'RIAGENDR', 
+                                 preproc_onehot, {'cutoff':2}),
+
+            # Ratio of family income to poverty
+            FeatureColumn('Demographics', 'INDFMPIR', 
+                                 preproc_onehot, {'cutoff':5}),
+            # # Annual household income
+            # FeatureColumn('Demographics', 'INDHHINC', 
+            #                      preproc_real, {'cutoff':11}),
+
+            # Race/Hispanic origin w/ NH Asian
             FeatureColumn('Demographics', 'RIDRETH3', 
-                                 preproc_onehot, None),
-            # Race/ethnicity
-            FeatureColumn('Demographics', 'RIDRETH1', 
-                                 preproc_onehot, None),
-            # Annual household income
-            FeatureColumn('Demographics', 'INDHHINC', 
-                                 preproc_real, {'cutoff':11}),
-            # Education level
-            FeatureColumn('Demographics', 'DMDEDUC2', 
-                                 preproc_real, {'cutoff':5}),
-            # BMI
+                                 preproc_real, {'cutoff':7}),
+
+            # Census 2000 FIPS State Code - 2 digit
+            FeatureColumn('Demographics', 'STATE2K', 
+                                 preproc_real, None),
+
+            # Census 2000 FIPS County Code - 3 digit
+            FeatureColumn('Demographics', 'CNTY2K', 
+                                 preproc_real, None),
+            ######################## DEMOGRAPHIC ########################
+
+
+            ########################## DIETARY ##########################
+            # How often add salt to food at table
+            FeatureColumn('Dietary', 'DBD100', 
+                                 preproc_real, {'cutoff':3}),
+
+            # Alpha-carotene (mcg) - 0 to 35057
+            FeatureColumn('Dietary', 'DR1TACAR', 
+                                 preproc_real, None),
+
+            # Beta-carotene (mcg) - 0 to 78752
+            FeatureColumn('Dietary', 'DR1TBCAR', 
+                                 preproc_real, None),
+            # Alcohol (gm) - 0 to 591.4
+            FeatureColumn('Dietary', 'DR1TALCO', 
+                                 preproc_real, None),
+
+            # Vitamin E as alpha-tocopherol (mg) - 0 to 172.32
+            FeatureColumn('Dietary', 'DR1TATOC', 
+                                 preproc_real, None),
+
+            # Total choline (mg) - 0 to 2909.1
+            FeatureColumn('Dietary', 'DR1TCHL', 
+                                 preproc_real, None),
+
+            # Cholesterol (mg) - 0 to 3515
+            FeatureColumn('Dietary', 'DR1TCHOL', 
+                                 preproc_real, None),
+
+            # Beta-cryptoxanthin (mcg) - 0 to 24328
+            FeatureColumn('Dietary', 'DR1TCRYP', 
+                                 preproc_real, None),
+
+            # Protein (gm) - 0 to 869.49
+            FeatureColumn('Dietary', 'DR1TPROT', 
+                                 preproc_real, None),
+
+            # Vitamin A, RAE (mcg) - 0 to 10597
+            FeatureColumn('Dietary', 'DR1TVARA', 
+                                 preproc_real, None),
+
+            # Total sugars (gm) - 0.13 to 1115.5
+            FeatureColumn('Dietary', 'DR1TSUGR', 
+                                 preproc_real, None),
+
+            # Total fat (gm) - 0 to 548.38
+            FeatureColumn('Dietary', 'DR1TTFAT', 
+                                 preproc_real, None),
+
+            # Sodium (mg) - 17 to 21399	
+            FeatureColumn('Dietary', 'DR1TSODI', 
+                                 preproc_real, None),
+
+            # Vitamin C (mg) - 0 to 2008
+            FeatureColumn('Dietary', 'DR1TVC', 
+                                 preproc_real, None),
+
+            # Vitamin K (mcg) - 0 to 4080.5	
+            FeatureColumn('Dietary', 'DR1TVK', 
+                                 preproc_real, None),
+            ########################## DIETARY ##########################
+
+
+            ######################## EXAMINATION ########################
+            # Body Mass Index (kg/m**2) - 12.4 to 82.1
             FeatureColumn('Examination', 'BMXBMI', 
                                  preproc_real, None),
-            # Waist
-            FeatureColumn('Examination', 'BMXWAIST', 
+            ######################## EXAMINATION ########################
+
+
+            ######################## LABORATORY ########################
+            # Urinary Chlamydia
+            FeatureColumn('Laboratory', 'URXUCL', 
                                  preproc_real, None),
-            # Height
-            FeatureColumn('Examination', 'BMXHT', 
+
+            # Trichomonas, Urine
+            FeatureColumn('Laboratory', 'URXUTRI', 
                                  preproc_real, None),
-            # Upper Leg Length
-            FeatureColumn('Examination', 'BMXLEG', 
+
+            # Basophils number (1000 cells/uL) - 0 to 0.8
+            FeatureColumn('Laboratory', 'LBDBANO', 
                                  preproc_real, None),
-            # Weight
-            FeatureColumn('Examination', 'BMXWT', 
+
+            # Eosinophils number (1000 cells/uL) - 0 to 4.3
+            FeatureColumn('Laboratory', 'LBDEONO', 
                                  preproc_real, None),
-            # Total Cholesterol
-            FeatureColumn('Laboratory', 'LBXTC', 
+
+            # Lymphocyte number (1000 cells/uL) - 0.2 to 49
+            FeatureColumn('Laboratory', 'LBDLYMNO', 
                                  preproc_real, None),
-            # Alcohol consumption
-            FeatureColumn('Questionnaire', 'ALQ101', 
+
+            # Monocyte number (1000 cells/uL) - 0.1 to 3.4	
+            FeatureColumn('Laboratory', 'LBDMONO', 
+                                 preproc_real, None),
+
+            # Segmented neutrophils num (1000 cell/uL) - 0.4 to 25.6
+            FeatureColumn('Laboratory', 'LBDNENO', 
+                                 preproc_real, None),
+
+            # Basophils percent (%) - 0 to 5.8
+            FeatureColumn('Laboratory', 'LBXBAPCT', 
+                                 preproc_real, None),
+
+            #  Eosinophils percent (%) - 0 to 36.6
+            FeatureColumn('Laboratory', 'LBXEOPCT', 
+                                 preproc_real, None),
+
+            # Hematocrit (%) - 17.9 to 56.5	
+            FeatureColumn('Laboratory', 'LBXHCT', 
+                                 preproc_real, None),
+
+            # Hemoglobin (g/dL) - 6.4 to 19.5
+            FeatureColumn('Laboratory', 'LBXHGB', 
+                                 preproc_real, None),
+
+            #  Lymphocyte percent (%) - 2.6 to 88
+            FeatureColumn('Laboratory', 'LBXLYPCT', 
+                                 preproc_real, None),
+
+            # Mean Cell Hgb Conc. (g/dL) - 13.8 to 38.5	
+            FeatureColumn('Laboratory', 'LBXMCHSI', 
+                                 preproc_real, None),
+
+            # Mean cell volume (fL) - 50.8 to 115.6
+            FeatureColumn('Laboratory', 'LBXMCVSI', 
+                                 preproc_real, None),
+
+            # Monocyte percent (%) - 1.4 to 29.3
+            FeatureColumn('Laboratory', 'LBXMOPCT', 
+                                 preproc_real, None),
+
+            # Mean platelet volume (fL) - 5.6 to 15.1	
+            FeatureColumn('Laboratory', 'LBXMPSI', 
+                                 preproc_real, None),
+
+            # Segmented neutrophils percent (%) - 3.6 to 93.2
+            FeatureColumn('Laboratory', 'LBXNEPCT', 
+                                 preproc_real, None),
+
+            # Platelet count (1000 cells/uL) - 14 to 777
+            FeatureColumn('Laboratory', 'LBXPLTSI', 
+                                 preproc_real, None),
+
+            # Red blood cell count (million cells/uL) - 2.52 to 7.9
+            FeatureColumn('Laboratory', 'LBXRBCSI', 
+                                 preproc_real, None),
+
+            # Red cell distribution width (%) - 11.5 to 26.4
+            FeatureColumn('Laboratory', 'LBXRDW', 
+                                 preproc_real, None),
+
+            # White blood cell count (1000 cells/uL) - 1.4 to 117.2
+            FeatureColumn('Laboratory', 'LBXWBCSI', 
+                                 preproc_real, None),
+
+            # Insulin (pmol/L) - 0.84 to 4094.88
+            FeatureColumn('Laboratory', 'LBDINSI', 
+                                 preproc_real, None),
+
+            # HPV Type 16
+            FeatureColumn('Laboratory', 'ORXH16', 
                                  preproc_real, {'cutoff':2}),
-            FeatureColumn('Questionnaire', 'ALQ120Q', 
-                                 preproc_real, {'cutoff':365}),
-            # Vigorous work activity
-            FeatureColumn('Questionnaire', 'PAQ605', 
+
+            # HPV Type 18
+            FeatureColumn('Laboratory', 'ORXH18', 
                                  preproc_real, {'cutoff':2}),
-            FeatureColumn('Questionnaire', 'PAQ620', 
-                                 preproc_real, {'cutoff':2}),
-            FeatureColumn('Questionnaire', 'PAQ180', 
-                                 preproc_real, {'cutoff':4}),
-            FeatureColumn('Questionnaire', 'PAD615', 
-                                 preproc_real, {'cutoff':780}),
-            # Doctor told overweight (risk factor)
-            FeatureColumn('Questionnaire', 'MCQ160J', 
-                                 preproc_onehot, {'cutoff':2}),
-            # Sleep
-            FeatureColumn('Questionnaire', 'SLD010H', 
-                                 preproc_real, {'cutoff':12}),
-            # Smoking
-            FeatureColumn('Questionnaire', 'SMQ020', 
-                                 preproc_onehot, None),
-            FeatureColumn('Questionnaire', 'SMD030', 
-                                 preproc_real, {'cutoff':72}),
-            # Blood relatives with arthritis
-            FeatureColumn('Questionnaire', 'MCQ250D',
-                                 preproc_onehot, {'cutoff':2}),
-            # joint pain/aching/stiffness in past year
-            FeatureColumn('Questionnaire', 'MPQ010',
-                                 preproc_onehot, {'cutoff':2}),
-            # symptoms began only because of injury
-            FeatureColumn('Questionnaire', 'MPQ030',
-                                 preproc_onehot, {'cutoff':2}),
-            # how long experiencing pain
-            FeatureColumn('Questionnaire', 'MPQ110',
-                                 preproc_real, {'cutoff':4}),
+
+            # Blood Benzene (ng/mL) - 0.017 to 1.97	
+            FeatureColumn('Laboratory', 'LBXVBZ', 
+                                 preproc_real, None),
+
+            # Blood Tetrachloroethene (ng/mL) - 0.0339 to 57.5
+            FeatureColumn('Laboratory', 'LBXV4C', 
+                                 preproc_real, None),
+
+            # Blood Bromoform (ng/mL) - 0.0057 to 0.254
+            FeatureColumn('Laboratory', 'LBXVBF', 
+                                 preproc_real, None),
+
+            # Estradiol (pg/mL) - 2.117 to 1220
+            FeatureColumn('Laboratory', 'LBXEST', 
+                                 preproc_real, None),
+
+            # SHBG (nmol/L) - 5.18 to 1067
+            FeatureColumn('Laboratory', 'LBXSHBG', 
+                                 preproc_real, None),
+
+            # Testosterone total (ng/dL) - 0.25 to 2543.99
+            FeatureColumn('Laboratory', 'LBXTST', 
+                                 preproc_real, None),
+
+            # Urinary Bisphenol A (ng/mL) - 0.14 to 792
+            FeatureColumn('Laboratory', 'URXBPH', 
+                                 preproc_real, None),
+
+            # 2,5-dichlorophenol (ug/L) - 0.07 to 30426.3
+            FeatureColumn('Laboratory', 'URX14D', 
+                                 preproc_real, None)
+            ######################## LABORATORY ########################
         ]
         nhanes_dataset = NHANES(self.data_path, columns)
         df = nhanes_dataset.process()
-        fe_cols = df.drop(['MCQ160A'], axis=1)
+        fe_cols = df.drop(['MCQ220'], axis=1)
         features = fe_cols.values
-        target = df['MCQ160A'].values
+        target = df['MCQ220'].values
         # remove nan labeled samples
         inds_valid = ~ np.isnan(target)
         features = features[inds_valid]
